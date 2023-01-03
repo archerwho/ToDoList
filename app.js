@@ -4,6 +4,7 @@ const express = require(`express`);
 const bodyParser = require(`body-parser`);
 const mongoose = require(`mongoose`);
 const _ = require(`lodash`);
+require("dotenv").config();
 
 const app = express();
 app.set(`view engine`, `ejs`);
@@ -11,16 +12,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(`public`));
 mongoose.set("strictQuery", false);
 
-mongoose.connect(
-  `mongodb+srv://admin-archer:archer123@cluster0.vwemc7l.mongodb.net/todolistDB`,
-  (error) => {
-    if (error) {
-      console.log(`error1: ${error}`);
-    } else {
-      console.log(`Connected to DB`);
-    }
+mongoose.connect(`${process.env.DATABASE_URL}`, (error) => {
+  if (error) {
+    console.log(`error1: ${error}`);
+  } else {
+    console.log(`Connected to DB`);
   }
-);
+});
 const itmeSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -123,4 +121,3 @@ app.get(`/about`, (req, res) => {
 });
 
 app.listen(3000, () => console.log(`Server is live at localhost:3000`));
-
